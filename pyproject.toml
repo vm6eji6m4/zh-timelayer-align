@@ -1,0 +1,26 @@
+[project]
+name = "zh-timelayer-align"
+version = "0.1.0"
+description = "Re-time Mandarin subtitles with CTC forced alignment, gated by alignment confidence"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "soundfile",
+    "torch>=2.1",
+    "torchaudio>=2.1",
+    "transformers>=4.40",
+    "opencc-python-reimplemented",
+]
+
+[project.optional-dependencies]
+model = ["huggingface_hub"]
+test = ["pytest"]
+
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["zh_timelayer_align"]
