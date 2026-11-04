@@ -26,10 +26,12 @@ def _default_t2s():
     """The model vocabulary is Simplified Chinese; map each char 1:1 before lookup."""
     try:
         import opencc
-        cc = opencc.OpenCC("t2s")
-        return lambda ch: (cc.convert(ch) or ch)[0]
-    except ImportError:  # still works for text that is already Simplified
-        return lambda ch: ch
+    except ImportError as e:  # an identity fallback would silently mis-align Traditional text
+        raise ImportError(
+            "zh_timelayer_align needs opencc (pip install opencc-python-reimplemented). "
+            "If the text is already Simplified, pass to_model_char=lambda ch: ch explicitly.") from e
+    cc = opencc.OpenCC("t2s")
+    return lambda ch: (cc.convert(ch) or ch)[0]
 
 
 class CtcAligner:

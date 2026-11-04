@@ -67,3 +67,14 @@ def test_negative_control_threshold_is_what_keeps_times(wav, monkeypatch):
     s = segs()
     tl.apply_timelayer(s, wav, FakeAligner(-8.0))
     assert s[0]["start"] != 31.0   # without the gate, the low-confidence times would be taken
+
+
+def test_missing_opencc_fails_loudly(monkeypatch):
+    """No silent identity fallback: Traditional text would be mis-aligned without any error."""
+    pytest.importorskip("torchaudio")
+    pytest.importorskip("transformers")
+    import sys
+    from zh_timelayer_align import aligner
+    monkeypatch.setitem(sys.modules, "opencc", None)
+    with pytest.raises(ImportError):
+        aligner._default_t2s()
